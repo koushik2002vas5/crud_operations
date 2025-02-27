@@ -22,6 +22,7 @@ class TaskManagerApp extends StatelessWidget {
     );
   }
 }
+
 class TaskListScreen extends StatefulWidget {
   @override
   _TaskListScreenState createState() => _TaskListScreenState();
@@ -42,26 +43,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
       _controller.clear();
     }
   }
-class TaskListScreen extends StatefulWidget {
-  @override
-  _TaskListScreenState createState() => _TaskListScreenState();
-}
 
-class _TaskListScreenState extends State<TaskListScreen> {
-  List<Task> tasks = [];
-  final TextEditingController _controller = TextEditingController();
-  String _selectedPriority = 'Medium';
-
-  void _addTask() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        tasks.add(Task(name: _controller.text, priority: _selectedPriority));
-        tasks.sort((a, b) =>
-            _priorityValue(b.priority).compareTo(_priorityValue(a.priority)));
-      });
-      _controller.clear();
-    }
-  }
   void _toggleTaskCompletion(int index) {
     setState(() {
       tasks[index].isCompleted = !tasks[index].isCompleted;
@@ -86,6 +68,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         return 0;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,3 +115,40 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 ),
               ],
             ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return ListTile(
+                    leading: Checkbox(
+                      value: task.isCompleted,
+                      onChanged: (_) => _toggleTaskCompletion(index),
+                    ),
+                    title: Text(task.name,
+                        style: TextStyle(
+                            decoration: task.isCompleted
+                                ? TextDecoration.lineThrough
+                                : null)),
+                    subtitle: Text('Priority: ${task.priority}'),
+                    trailing: ElevatedButton(
+                      onPressed: () => _deleteTask(index),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Colors.red, // Red color for Delete button
+                      ),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.white), // White text
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
