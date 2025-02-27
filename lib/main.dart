@@ -22,3 +22,23 @@ class TaskManagerApp extends StatelessWidget {
     );
   }
 }
+class TaskListScreen extends StatefulWidget {
+  @override
+  _TaskListScreenState createState() => _TaskListScreenState();
+}
+
+class _TaskListScreenState extends State<TaskListScreen> {
+  List<Task> tasks = [];
+  final TextEditingController _controller = TextEditingController();
+  String _selectedPriority = 'Medium';
+
+  void _addTask() {
+    if (_controller.text.isNotEmpty) {
+      setState(() {
+        tasks.add(Task(name: _controller.text, priority: _selectedPriority));
+        tasks.sort((a, b) =>
+            _priorityValue(b.priority).compareTo(_priorityValue(a.priority)));
+      });
+      _controller.clear();
+    }
+  }
