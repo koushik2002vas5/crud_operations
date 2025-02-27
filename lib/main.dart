@@ -86,3 +86,49 @@ class _TaskListScreenState extends State<TaskListScreen> {
         return 0;
     }
   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Task Manager'),
+        backgroundColor: Colors.blue, // Background color for the app name
+      ),
+      backgroundColor: const Color.fromARGB(255, 157, 231, 237),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(hintText: 'Enter task name'),
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: _selectedPriority,
+                  items: ['Low', 'Medium', 'High'].map((priority) {
+                    return DropdownMenuItem(
+                      value: priority,
+                      child: Text(priority),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedPriority = value!;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: _addTask,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // Blue color for Add button
+                  ),
+                  child: Text(
+                    'Add',
+                    style: TextStyle(color: Colors.black), // Black text
+                  ),
+                ),
+              ],
+            ),
